@@ -1,0 +1,20 @@
+[build-system]
+requires = ["hatchling>=1.27.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "et-scrapper"
+version = "0.1.0"
+description = "Economic Times scraper for homepage and article data"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "asyncio-throttle>=1.0.2",
+    "beautifulsoup4>=4.12.0",
+    "httpx>=0.27.0",
+    "lxml>=5.2.0",
+    "pydantic>=2.7.0",
+]
+
+[tool.uv]
+package = true
