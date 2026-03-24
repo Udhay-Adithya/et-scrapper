@@ -1,9 +1,13 @@
-# et-scrapper
+<h1 align="center">
+    <img src="docs/_static/et-logo-small.jpeg" alt="ET logo" width="28" /> et-scrapper
+</h1>
 
-[![Documentation Status](https://readthedocs.org/projects/et-scrapper/badge/?version=latest)](https://et-scrapper.readthedocs.io/en/latest/?badge=latest)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
-[![GitHub Repo](https://img.shields.io/badge/source-GitHub-181717?logo=github)](https://github.com/Udhay-Adithya/et-scrapper)
+<p align="center">
+    <a href="https://et-scrapper.readthedocs.io/en/latest/?badge=latest"><img src="https://readthedocs.org/projects/et-scrapper/badge/?version=latest" alt="Documentation Status" /></a>
+    <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT" /></a>
+    <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.10%2B-blue.svg" alt="Python" /></a>
+    <a href="https://github.com/Udhay-Adithya/et-scrapper"><img src="https://img.shields.io/badge/source-GitHub-181717?logo=github" alt="GitHub Repo" /></a>
+</p>
 
 Python package for scraping homepage and article data from [The Economic Times](https://economictimes.indiatimes.com).
 
