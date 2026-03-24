@@ -25,6 +25,9 @@ manual_test.py
 .mypy_cache/
 .ruff_cache/
 
+# Documentation build output
+docs/_build/
+
 # OS/editor noise
 .DS_Store
 .vscode/
