@@ -15,11 +15,11 @@ class ETHttpClient:
 
     Typical usage:
 
-    ```python
-    async with ETHttpClient() as client:
-        homepage = await client.scrape_homepage()
-        articles = await client.scrape_articles(["https://..."])
-    ```
+    ::
+
+        async with ETHttpClient() as client:
+            homepage = await client.scrape_homepage()
+            articles = await client.scrape_articles(["https://..."])
 
     Args:
         headers: Optional custom HTTP headers.

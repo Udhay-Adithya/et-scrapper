@@ -1,10 +1,12 @@
 """Public package API for the ET scraper.
 
-```python
-async with ETHttpClient() as client:
-        homepage = await client.scrape_homepage()
-        articles = await client.scrape_articles(urls)
-```
+Example:
+
+::
+
+    async with ETHttpClient() as client:
+    homepage = await client.scrape_homepage()
+    articles = await client.scrape_articles(urls)
 """
 
 from __future__ import annotations
