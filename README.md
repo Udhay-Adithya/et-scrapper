@@ -1,66 +1,45 @@
 # et-scrapper
 
-A Python package to scrape news, market data, and financial information from [Economic Times](https://economictimes.indiatimes.com).
+[![Documentation Status](https://readthedocs.org/projects/et-scrapper/badge/?version=latest)](https://et-scrapper.readthedocs.io/en/latest/?badge=latest)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
+[![GitHub Repo](https://img.shields.io/badge/source-GitHub-181717?logo=github)](https://github.com/Udhay-Adithya/et-scrapper)
 
-Built as an experiment for feeding ET news data into AI/LLM pipelines, with a function-first API for easy integration.
+Python package for scraping homepage and article data from [The Economic Times](https://economictimes.indiatimes.com).
 
----
+`et-scrapper` is designed for programmatic ingestion workflows such as market monitoring, editorial intelligence, and downstream AI pipelines.
 
-## Package Structure
+## Features
 
-```text
-et-scrapper/
-+-- et_scrapper/
-|   +-- __init__.py
-|   +-- constants.py        # URLs, headers, delays, parser constants
-|   +-- models.py            # Pydantic data models
-|   +-- scrapers/
-|   |   +-- __init__.py
-|   |   +-- homepage.py      # Homepage scraper (8 data types)
-|   |   +-- article.py       # Article page scraper
-|   +-- utils/
-|       +-- __init__.py
-|       +-- http.py           # ETHttpClient (function-first API)
-+-- pyproject.toml
-+-- README.md
-```
+- Async scraping with `httpx`
+- Structured outputs using Pydantic models
+- Homepage aggregation across multiple ET sections
+- Detailed article extraction from article URLs
+- Paywalled ETPrime content is safely skipped
 
----
+## Installation
 
-## What It Scrapes
-
-| # | Data Type | Source |
-| --- | --- | --- |
-| 1 | Headline News / Top Stories | Homepage |
-| 2 | Market Benchmark Data | Top ticker (Sensex, Nifty, etc.) |
-| 3 | Stock Quotes | Homepage stock widgets |
-| 4 | Crypto Prices | Homepage crypto section |
-| 5 | Mutual Fund Data | Homepage MF section |
-| 6 | Categorized News Sections | Section widgets |
-| 7 | Opinion / Expert Views | Opinion section |
-| 8 | Videos | Video widget |
-| 9 | Detailed Article Pages | Individual article URLs |
-
-> **Note:** ETPrime (paywalled) content is automatically skipped.
-
----
-
-## Setup (uv)
+### Using uv (recommended)
 
 ```bash
-# 1. Install uv (if needed)
-# macOS/Linux: curl -LsSf https://astral.sh/uv/install.sh | sh
-# or: brew install uv
-
-# 2. Create/update project environment and install dependencies
 uv sync
 ```
 
----
+### Install directly from GitHub
 
-## Quick Start (Function-First API)
+```bash
+uv pip install "git+https://github.com/Udhay-Adithya/et-scrapper.git"
+```
 
-### Scrape homepage directly
+### Build package artifacts
+
+```bash
+uv build
+```
+
+## Quick Start
+
+### Scrape homepage data
 
 ```python
 import asyncio
@@ -69,15 +48,15 @@ from et_scrapper import ETHttpClient
 
 async def main() -> None:
     async with ETHttpClient() as client:
-        data = await client.scrape_homepage()
-        print(f"Headlines: {len(data.headlines)}")
-        print(f"Market indices: {len(data.market_indices)}")
+        homepage = await client.scrape_homepage()
+        print(f"Headlines: {len(homepage.headlines)}")
+        print(f"Market indices: {len(homepage.market_indices)}")
 
 
 asyncio.run(main())
 ```
 
-### Scrape article URLs directly
+### Scrape article URLs
 
 ```python
 import asyncio
@@ -91,13 +70,13 @@ async def main() -> None:
     ]
     async with ETHttpClient() as client:
         articles = await client.scrape_articles(urls)
-        print(f"Parsed: {len(articles)}")
+        print(f"Articles parsed: {len(articles)}")
 
 
 asyncio.run(main())
 ```
 
-### Chain homepage to detailed article scrape
+### Chain homepage headlines to article details
 
 ```python
 import asyncio
@@ -107,93 +86,71 @@ from et_scrapper import ETHttpClient
 async def main() -> None:
     async with ETHttpClient() as client:
         homepage = await client.scrape_homepage()
-        top_urls = [item.url for item in homepage.headlines[:5] if item.url]
-        articles = await client.scrape_articles(top_urls)
-        print(f"Top headlines sampled: {len(top_urls)}")
-        print(f"Detailed articles parsed: {len(articles)}")
+        urls = [item.url for item in homepage.headlines[:5] if item.url]
+        details = await client.scrape_articles(urls)
+        print(f"Seed URLs: {len(urls)}")
+        print(f"Detailed articles: {len(details)}")
 
 
 asyncio.run(main())
 ```
 
----
+## What Gets Scraped
 
-## Publish Notes
+- Headline news / top stories
+- Market benchmark data (Sensex, Nifty, etc.)
+- Stock quotes
+- Crypto prices
+- Mutual fund snippets
+- Categorized section stories
+- Opinion stories
+- Video items
+- Detailed article pages
 
-This package now uses a publish-ready structure:
+## Documentation
 
-- Package code lives under `et_scrapper/`.
-- `pyproject.toml` defines build backend, metadata, and dependencies.
+Project documentation is built with Sphinx and Furo.
 
-Build commands:
+- Source docs: `docs/`
+- Build docs locally:
 
 ```bash
-uv build
+uv pip install -r docs/requirements.txt
+uv run sphinx-build -b html docs docs/_build/html
 ```
 
-Upload (example with Twine):
+Open `docs/_build/html/index.html` in a browser.
+
+## Development
+
+Run the diagnostic script:
 
 ```bash
-uv run python -m pip install twine
-uv run twine upload dist/*
+uv run python manual_test.py
 ```
 
----
+## Project Structure
 
-## Extended Library Example
-
-```python
-import asyncio
-from et_scrapper import ETHttpClient
-
-async def main():
-    async with ETHttpClient() as client:
-        homepage = await client.scrape_homepage()
-        print(f"Top stories: {len(homepage.headlines)}")
-        print(f"Benchmarks: {len(homepage.market_indices)}")
-
-        article = await client.scrape_article("https://economictimes.indiatimes.com/...")
-        if article:  # None if paywalled
-            print(article.title)
-            print(article.body_text[:500])
-
-asyncio.run(main())
+```text
+et-scrapper/
++-- et_scrapper/
+|   +-- __init__.py
+|   +-- constants.py
+|   +-- models.py
+|   +-- scrapers/
+|   |   +-- homepage.py
+|   |   +-- article.py
+|   +-- utils/
+|       +-- http.py
++-- docs/
++-- pyproject.toml
++-- README.md
 ```
 
----
+## Contributing
 
-## Data Models
+See [CONTRIBUTING.md](CONTRIBUTING.md).
 
-All models are defined in `et_scrapper/models.py` using **Pydantic v2**.
+## License
 
-| Model | Description |
-| --- | --- |
-| `HeadlineArticle` | Top-story headline card from homepage sections |
-| `ArticleDetail` | Full article page data (text, metadata, tags, related) |
-| `MarketIndex` | Index ticker row (Sensex/Nifty etc.) |
-| `StockQuote` | Stock quote widget row |
-| `CryptoPrice` | Crypto widget row |
-| `MutualFund` | Mutual-fund card or row |
-| `SectionArticle` | Article entry inside a section block |
-| `NewsSection` | Categorized section with article list |
-| `OpinionArticle` | Opinion/expert item |
-| `VideoItem` | Video metadata card |
-| `HomepageData` | Aggregated homepage response object |
-
----
-
-## Dependencies
-
-- `httpx` — async HTTP client
-- `beautifulsoup4` — HTML parsing
-- `lxml` — fast HTML parser backend
-- `pydantic` — data validation and serialisation
-
----
-
-## Notes
-
-- Random delays (1.5–4s) are added between requests to avoid rate limiting.
-- Browser-like headers are used to reduce bot detection.
-- CSS selectors may need updating if ET changes their page structure.
-- This project is for personal/experimental use only.
+Distributed under the MIT License. See [LICENSE](LICENSE).
