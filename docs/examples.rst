@@ -84,6 +84,71 @@ Homepage to article chain
 
    asyncio.run(main())
 
+Topic wrapper scrape
+--------------------
+
+.. code-block:: python
+
+   import asyncio
+   from et_scrapper import ETHttpClient
+
+
+   async def main() -> None:
+       async with ETHttpClient() as client:
+           wrapped_topics = [
+               await client.scrape_trending_news(limit=10),
+               await client.scrape_india_news(limit=10),
+               await client.scrape_economy_finance_news(limit=10),
+               await client.scrape_politics_news(limit=10),
+               await client.scrape_sports_news(limit=10),
+               await client.scrape_tech_internet_news(limit=10),
+               await client.scrape_stock_market_news(limit=10),
+           ]
+
+           for topic in wrapped_topics:
+               print(topic.section_name, len(topic.articles))
+
+
+   asyncio.run(main())
+
+Generic topic-search route
+--------------------------
+
+.. code-block:: python
+
+   import asyncio
+   from et_scrapper import ETHttpClient
+
+
+   async def main() -> None:
+       async with ETHttpClient() as client:
+           # Builds: /topic/amaravati/news
+           topic_page = await client.scrape_topic_search_news("amaravati", limit=10)
+           print(topic_page.url)
+           print(len(topic_page.articles))
+
+
+   asyncio.run(main())
+
+Curated topic pages in one call
+-------------------------------
+
+.. code-block:: python
+
+   import asyncio
+   from et_scrapper import ETHttpClient
+
+
+   async def main() -> None:
+       async with ETHttpClient() as client:
+           topic_pages = await client.scrape_curated_topic_pages(limit=10)
+           print(f"Topic pages: {len(topic_pages)}")
+           if topic_pages:
+               print(topic_pages[0].section_name)
+
+
+   asyncio.run(main())
+
 Helper functions
 ----------------
 
@@ -98,6 +163,25 @@ Helper functions
        urls = [item.url for item in homepage.headlines[:3] if item.url]
        details = await scrape_articles(urls)
        print(len(homepage.headlines), len(details))
+
+
+   asyncio.run(main())
+
+Topic helper functions
+----------------------
+
+.. code-block:: python
+
+   import asyncio
+   from et_scrapper import scrape_topic_search_news, scrape_curated_topic_pages
+
+
+   async def main() -> None:
+       topic = await scrape_topic_search_news("amaravati", limit=10)
+       curated = await scrape_curated_topic_pages(limit=10)
+
+       print(topic.section_name, len(topic.articles))
+       print(f"Curated pages: {len(curated)}")
 
 
    asyncio.run(main())

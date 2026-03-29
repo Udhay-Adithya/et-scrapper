@@ -33,6 +33,14 @@ Article scraper
    :undoc-members:
    :show-inheritance:
 
+Topic scraper
+-------------
+
+.. automodule:: et_scrapper.scrapers.topic
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Models
 ------
 
