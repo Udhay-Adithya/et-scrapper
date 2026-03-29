@@ -45,3 +45,24 @@ PAYWALL_MARKERS = [
     "Subscribe to ET Prime",
     "ET Prime Story",
 ]
+
+# Curated topic/listing endpoints used by wrapper APIs.
+TOPIC_PATHS = {
+    "trending": "/news/new-updates",
+    "india": "/news/india",
+    "economy_finance": "/news/economy/articlelist/1286551815.cms",
+    "politics": "/news/politics",
+    "sports": "/news/sports",
+    "tech_internet": "/tech/technology",
+    "stocks_news": "/markets/stocks/news",
+}
+
+DEFAULT_TOPIC_KEYS = [
+    "trending",
+    "india",
+    "economy_finance",
+    "politics",
+    "sports",
+    "tech_internet",
+    "stocks_news",
+]
