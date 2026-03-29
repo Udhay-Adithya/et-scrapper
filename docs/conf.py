@@ -12,6 +12,8 @@ sys.path.insert(0, str(PROJECT_ROOT))
 project = "et-scrapper"
 author = "Udhay-Adithya"
 copyright = f"{datetime.now().year}, {author}"
+version = "0.2"
+release = "0.2.0"
 
 extensions = [
     "sphinx.ext.autodoc",
