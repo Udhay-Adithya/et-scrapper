@@ -135,6 +135,16 @@ class ArticleDetail(BaseModel):
     related_articles: list[HeadlineArticle] = Field(default_factory=list)
 
 
+class TopicPageData(BaseModel):
+    """Represents a topic/listing page and its extracted article cards."""
+
+    url: str
+    section_name: str | None = None
+    description: str | None = None
+    scraped_at: str = ""
+    articles: list[HeadlineArticle] = Field(default_factory=list)
+
+
 class HomepageData(BaseModel):
     """Aggregate container for all homepage data extracted in a scrape."""
 

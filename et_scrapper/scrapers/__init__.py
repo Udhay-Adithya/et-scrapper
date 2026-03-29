@@ -2,5 +2,6 @@
 
 from .homepage import HomepageScraper
 from .article import ArticleScraper
+from .topic import TopicScraper
 
-__all__ = ["HomepageScraper", "ArticleScraper"]
+__all__ = ["HomepageScraper", "ArticleScraper", "TopicScraper"]
