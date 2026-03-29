@@ -80,6 +80,35 @@ async def main() -> None:
 asyncio.run(main())
 ```
 
+### Scrape topic/list pages
+
+```python
+import asyncio
+from et_scrapper import ETHttpClient
+
+
+async def main() -> None:
+    async with ETHttpClient() as client:
+        # Single-topic wrappers
+        india = await client.scrape_india_news(limit=10)
+        politics = await client.scrape_politics_news(limit=10)
+
+        # Generic search-topic wrapper for routes like /topic/<keyword>/news
+        dynamic_topic = await client.scrape_topic_search_news("amaravati", limit=10)
+
+        # All built-in topics in one call
+        topic_pages = await client.scrape_curated_topic_pages(limit=10)
+
+        print(india.section_name, len(india.articles))
+        print(politics.section_name, len(politics.articles))
+        print(dynamic_topic.section_name, len(dynamic_topic.articles))
+        for page in topic_pages:
+            print(page.section_name, len(page.articles))
+
+
+asyncio.run(main())
+```
+
 ### Chain homepage headlines to article details
 
 ```python
@@ -110,6 +139,7 @@ asyncio.run(main())
 - Opinion stories
 - Video items
 - Detailed article pages
+- Topic/list pages (India, Politics, Sports, Tech, Stocks, etc.)
 
 ## Documentation
 
